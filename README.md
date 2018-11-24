@@ -8,7 +8,7 @@ python-五子棋
 
 游戏截图
 ------
-![image text](https://github.com/tctctctctc/python-/tree/master/resouse/a.png)
+![](https://github.com/tctctctctc/python-/raw/master/resouse/a.png)
 
 开发者
 ----
