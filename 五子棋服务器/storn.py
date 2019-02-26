@@ -45,7 +45,7 @@ class Storn_White(pygame.sprite.Sprite):
         y = []
         pos_x = 0
         pos_y = 0
-        for i in range(0,15):
+        for i in range(1,15):
             x.append(28+i*40)
         for i in range(0,15):
             y.append(28+i*40)
