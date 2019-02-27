@@ -4,6 +4,12 @@ import math
 
 pygame.init()
 
+x = []
+y = []
+for i in range(0, 15):
+    x.append(28 + i * 40)
+    y.append(28 + i * 40)
+
 class Storn_Black(pygame.sprite.Sprite):
     
     def __init__(self,pos):
@@ -15,20 +21,17 @@ class Storn_Black(pygame.sprite.Sprite):
         self.pos = pos
 
     def location(self):
-        x = []
-        y = []
         pos_x = pos_y = None
-        for i in range(0,15):
-            x.append(28+i*40)
-        for i in range(0,15):
-            y.append(28+i*40)
         for each in x:
             if math.fabs(each - self.pos[0]) < 20:
                 pos_x = each
         for each in y:
             if math.fabs(each - self.pos[1]) < 20:
                 pos_y = each
-        return pos_x - self.rect.width//2,pos_y - self.rect.height//2
+        return pos_x,pos_y
+
+    def image_rect(self):
+        return self.location()[0] - self.rect.width//2, self.location()[1] - self.rect.height//2
 
 
 class Storn_White(pygame.sprite.Sprite):
@@ -41,18 +44,17 @@ class Storn_White(pygame.sprite.Sprite):
         self.pos = pos
 
     def location(self):
-        x = []
-        y = []
+        global x
+        global y
         pos_x = 0
         pos_y = 0
-        for i in range(1,15):
-            x.append(28+i*40)
-        for i in range(0,15):
-            y.append(28+i*40)
         for each in x:
             if math.fabs(each - int(self.pos[0])) < 20:
                 pos_x = each
         for each in y:
             if math.fabs(each - int(self.pos[1])) < 20:
                 pos_y = each
-        return pos_x - self.rect.width//2,pos_y - self.rect.height//2
+        return pos_x,pos_y
+
+    def image_rect(self):
+        return self.location()[0] - self.rect.width//2, self.location()[1] - self.rect.height//2

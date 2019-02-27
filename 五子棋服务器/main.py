@@ -19,8 +19,11 @@ x = []
 y = []
 for i in range(0, 15):
     x.append(28 + i * 40)
-for i in range(0, 15):
     y.append(28 + i * 40)
+
+# 记录棋盘每个坐标的属性，没有棋子为0，白棋为1，黑棋为2
+map_chess = {}
+
 
 # 输赢
 font1 = pygame.font.Font('font/12345.TTF', 35)
@@ -85,19 +88,16 @@ inputs = [tcpsersock]
 
 # 判断是否有子
 def is_empty(me, targert):
+    global map_chess
     a = False
-    for i in targert:
-        if i.location() == me:
-            a = True
+    if map_chess[str(me[0]) + '|' + str(me[1])]:
+        a = True
     return a
 
 
 
 # 判断是否有五子连线
 def is_win(targert):
-    global x, y
-    if len(targert) == 0:
-        return False
     for each in targert:
         (a,b) = each.location()
 
@@ -184,7 +184,7 @@ def is_win(targert):
                 break
         num_en += 1
 
-        # 东北，东南方向
+        # 东北，西南方向
         num_wn = 0
         c5 = a + 40
         c6 = b - 40
@@ -205,7 +205,7 @@ def is_win(targert):
             isbreak = True
             for i in targert:
                 isbreak = True
-                if i.location() == (c3, c4):
+                if i.location() == (c7, c8):
                     num_wn += 1
                     isbreak = False
             if not isbreak:
@@ -219,8 +219,167 @@ def is_win(targert):
     return False
 
 
+# 判断每个点的价值
+def point_value(pos, white_chesses, black_chesses, identify1, identify2):
+    value = 0
+    for i in range(1,9):
+        # *1111_ 活四
+        if get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 4, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 5, white_chesses, black_chesses) == 0:
+            value += 40000
+        # *11112 死四1
+        if get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 4, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 5, white_chesses, black_chesses) == identify2:
+            value += 30000
+        # 1*111 死四2
+        if get_point(pos, i, -1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == identify1:
+            value += 30000
+        # 11*11 死四3
+        if get_point(pos, i, -2, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, -1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == identify1:
+            value += 30000
+        # *111_ 活三1
+        if get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 4, white_chesses, black_chesses) == 0:
+            value += 20000
+        # *1_11_ 活三2
+        if get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == 0 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 4, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 5, white_chesses, black_chesses) == 0:
+            value += 20000
+        # *1112 死三1
+        if get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 4, white_chesses, black_chesses) == identify2:
+            value += 15000
+        # _1_112 死三2
+        if get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == 0 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 4, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 5, white_chesses, black_chesses) == identify2:
+            value += 15000
+        # _11_12 死三3
+        if get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == 0 and \
+            get_point(pos, i, 4, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 5, white_chesses, black_chesses) == identify2:
+            value += 15000
+        # 1__11 死三4
+        if get_point(pos, i, -1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 1, white_chesses, black_chesses) == 0 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == identify1:
+            value += 15000
+        # 1_1_1 死三5
+        if get_point(pos, i, -1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == 0 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == identify1:
+            value += 15000
+        # 2_111_2 死三6
+        if get_point(pos, i, -1, white_chesses, black_chesses) == identify2 and \
+            get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 4, white_chesses, black_chesses) == 0 and \
+            get_point(pos, i, 5, white_chesses, black_chesses) == identify2:
+            value += 15000
+        # __11__ 活二1
+        if get_point(pos, i, -1, white_chesses, black_chesses) == 0 and \
+            get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == 0 and \
+            get_point(pos, i, 4, white_chesses, black_chesses) == 0:
+            value += 1000
+        # _1_1_ 活二2
+        if get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == 0 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 4, white_chesses, black_chesses) == 0:
+            value += 1000
+        # *1___
+        if get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == 0 and \
+            get_point(pos, i, 3, white_chesses, black_chesses) == 0 and \
+            get_point(pos, i, 4, white_chesses, black_chesses) == 0:
+            value += 50
+        # *1_
+        if get_point(pos, i, 1, white_chesses, black_chesses) == identify1 and \
+            get_point(pos, i, 2, white_chesses, black_chesses) == 0:
+            value += 20
+    return value
+
+# 电脑选取落子的位置
+def ai(white_chesses, black_chesses, chesses):
+    value = max1 = max2 = 0
+    pos1 = pos2 = ()
+    # 进攻时
+    for i in range(0,15):
+        row = 28 + i * 40
+        for j in range(0,15):
+            col = 28 + j * 40
+            pos = (row,col)
+            if is_empty(pos, chesses):
+                continue
+            value = point_value(pos, white_chesses, black_chesses, 1, 2)
+            if value > max1:
+                max1 = value
+                pos1 = (row,col)
+
+    # 防守时
+    for i in range(0,15):
+        for j in range(0,15):
+            row = 28 + i * 40
+            col = 28 + j * 40
+            if is_empty((row,col), chesses):
+                continue
+            value = point_value((row,col), white_chesses, black_chesses, 2, 1)
+            if value > max2:
+                max2 = value
+                pos2 = (row,col)
+    if max1 > max2:
+        return pos1
+    else:
+        return pos2
 
 
+# 获取当前坐标的属性，返回1代表白棋，返回2代表黑棋，返回3代表没有棋
+def get_point(pos, src, offset, white_chesses, black_chesses):
+    # 8个方向
+    global map_chess
+    directions = [[0,1],[1,1],[1,0],[1,-1],[0,-1],[-1,-1],[-1,0],[-1,1]]
+    x1,y1 = pos
+    x1 = x1 + directions[src-1][0] * offset * 40
+    y1 = y1 + directions[src-1][1] * offset * 40
+    if x1 > 588 or y1 > 588 or x1 < 28 or y1 < 28:
+        return 5
+    else:
+        return map_chess[str(x1) + '|' + str(y1)]
+
+# 初始化棋盘
+def init():
+    global map_chess
+    for i in x:
+        for j in y:
+            map_chess[str(i) + '|' + str(j)] = 0
 
 
 def main():
@@ -280,15 +439,11 @@ def main():
 
     running = True
 
+    init()
+
     while running:
 
         screen.blit(bg_image, (0, 0))
-
-        # 绘制棋子
-        if is_choise:
-            if chesses:
-                for i in chesses:
-                    screen.blit(i.image, i.location())
 
         # 绘制选项
         if not is_choise:
@@ -335,6 +490,7 @@ def main():
                             me = storn.Storn_White(eval(data))
                             white_chesses.append(me)
                             chesses.append(me)
+
                             is_play = True
 
         for event in pygame.event.get():
@@ -349,28 +505,14 @@ def main():
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
 
-                    if is_end and is_people:
-                        if not is_recieve1 and not is_recieve2:
-                            pos = pygame.mouse.get_pos()
-                            if win_text_rect.left < pos[0] < win_text_rect.right and \
-                                                    win_text_rect.top < pos[1] < win_text_rect.top + 30:
-                                tcpclisock.send('again'.encode('utf8'))
-                            if win_text_rect.left < pos[0] < win_text_rect.right - 50 and \
-                                                            win_text_rect.top + 50 < pos[1] < win_text_rect.top + 120:
-                                is_people = False
-                                is_choise = False
-                                if is_link:
-                                    is_link = False
-                                    tcpclisock.send('no'.encode('utf8'))
-                                main()
-
                     if is_choise:
                         if is_play and not is_recieve1 and not is_end:
                             pos = pygame.mouse.get_pos()
                             me = storn.Storn_Black(pos)
-                            if not is_empty(me, chesses):
+                            if not is_empty(me.location(), chesses):
                                 black_chesses.append(me)
                                 chesses.append(me)
+                                map_chess[str(me.location()[0]) + '|' + str(me.location()[1])] = 2
                                 if is_people:
                                     tcpclisock.send(str(pos).encode('utf8'))
                                 is_play = False
@@ -397,6 +539,30 @@ def main():
                             else:
                                 pygame.mixer.music.play()
 
+                    if is_end:
+                        if not is_recieve1 and not is_recieve2:
+                            pos = pygame.mouse.get_pos()
+                            if win_text_rect.left < pos[0] < win_text_rect.right and \
+                                                    win_text_rect.top < pos[1] < win_text_rect.top + 30:
+                                if is_people:
+                                    tcpclisock.send('again'.encode('utf8'))
+                                if is_ai:
+                                    is_playagain = True
+                                    is_play = True
+                                    is_end = False
+                                    init()
+
+                            if win_text_rect.left < pos[0] < win_text_rect.right - 50 and \
+                                                            win_text_rect.top + 50 < pos[1] < win_text_rect.top + 120:
+                                is_people = False
+                                is_choise = False
+                                if is_link:
+                                    is_link = False
+                                    tcpclisock.send('no'.encode('utf8'))
+                                main()
+
+
+
 
                     if is_recieve2:
                         pos = pygame.mouse.get_pos()
@@ -419,6 +585,21 @@ def main():
                                                         text8_rect.top < pos[1] < text8_rect.top + 120:
                             tcpclisock.send('no'.encode('utf8'))
                             main()
+        # 电脑落子
+        if is_ai and not is_play:
+            me = storn.Storn_White(ai(white_chesses, black_chesses, chesses))
+            white_chesses.append(me)
+            chesses.append(me)
+            print(len(white_chesses))
+            print(len(black_chesses))
+            map_chess[str(me.location()[0]) + '|' + str(me.location()[1])] = 1
+            is_play = True
+
+        # 绘制棋盘
+        if is_choise:
+            if chesses:
+                for i in chesses:
+                    screen.blit(i.image, i.image_rect())
 
         # 判断输赢
         if not is_end and is_win(black_chesses):
