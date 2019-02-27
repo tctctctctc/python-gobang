@@ -9,7 +9,7 @@ class Storn_Black(pygame.sprite.Sprite):
     def __init__(self,pos):
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = pygame.image.load('image/storn_black.png ')\
+        self.image = pygame.image.load('image/storn_black.png')\
                     .convert_alpha()
         self.rect = self.image.get_rect()
         self.pos = pos
@@ -28,14 +28,17 @@ class Storn_Black(pygame.sprite.Sprite):
         for each in y:
             if math.fabs(each - self.pos[1]) < 20:
                 pos_y = each
-        return pos_x - self.rect.width//2,pos_y - self.rect.height//2
+        return pos_x,pos_y
+
+    def image_rect(self):
+        return self.location()[0] - self.rect.width//2, self.location()[1] - self.rect.height//2
 
 
 class Storn_White(pygame.sprite.Sprite):
     def __init__(self,pos):
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = pygame.image.load('image/storn_white.png ')\
+        self.image = pygame.image.load('image/storn_white.png')\
                     .convert_alpha()
         self.rect = self.image.get_rect()
         self.pos = pos
@@ -54,4 +57,7 @@ class Storn_White(pygame.sprite.Sprite):
         for each in y:
             if math.fabs(each - self.pos[1]) < 20:
                 pos_y = each
-        return pos_x - self.rect.width//2,pos_y - self.rect.height//2
+        return pos_x,pos_y
+
+    def image_rect(self):
+        return self.location()[0] - self.rect.width//2, self.location()[1] - self.rect.height//2
