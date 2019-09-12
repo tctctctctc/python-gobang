@@ -395,7 +395,7 @@ def main():
     is_play = True
 
     # 标志是否连接
-    islink = True
+    islink = False
 
     # 标志是否结束游戏
     result = False
