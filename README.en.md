@@ -3,7 +3,7 @@
 ## Background  
   This project is a Gobang game just after learning Python socket.  
   This project is implemented with pyGame and socket, which is divided into server and client part,and can be played by two people in LAN.  
-  In the windows environment, it runs normally after many tests. 
+  In the windows environment, it runs normally after many tests.   
   [English Version](README.en.md)
       
 ## Main ideas
@@ -25,7 +25,7 @@ The idea of computer combat is also very simple. It should be the most common an
 It is to cycle through each point of the chessboard, judge the value of the point, and select the point with the greatest value.This requires a certain understanding of Gobang's form. Here are some common types of chess(Agreement 1 is your chess piece,2 is the opponent's pieces,0 is empty)
 
     "Live 4"(011110)：At this time, the four pieces are connected, and the two ends are empty, which can not prevent one side from winning. At this time, the value should be set to the highest.
-    "Death four"(011112|10111|11011)：Among the four pieces, only one place can connect five pieces into a line. One's own chess pieces can win, and the other's can prevent the other from winning. At this time, the value is the second highest.
+    "Death 4"(011112|10111|11011)：Among the four pieces, only one place can connect five pieces into a line. One's own chess pieces can win, and the other's can prevent the other from winning. At this time, the value is the second highest.
     ......
 In this way, judge each type of chess and get the value of the point.  
 When the computer chooses the position of the drop, it needs to traverse the chessboard twice to get the maximum value of attack and defense.
