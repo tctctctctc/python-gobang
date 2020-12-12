@@ -4,7 +4,7 @@
   This project is a Gobang game just after learning Python socket.  
   This project is implemented with pyGame and socket, which is divided into server and client part,and can be played by two people in LAN.  
   In the windows environment, it runs normally after many tests.   
-  [English Version](README.en.md)
+  [Zh Version](README.md)
       
 ## Main ideas
 
