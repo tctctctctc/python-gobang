@@ -33,14 +33,6 @@ When the computer chooses the position of the drop, it needs to traverse the che
 
 ## Game screenshot
 ![](https://github.com/tctctctctc/python-/raw/master/resouse/a.png)
-
-
-## Contributing
-  Little prince
-
-## Contact 
-  QQ：935706071  
-  e-mail：935706071@qq.com
   
 ## License
   [Apache-2.0 License](LICENSE)
