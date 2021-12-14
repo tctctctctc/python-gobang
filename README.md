@@ -32,13 +32,6 @@ select()的机制中提供一fd_set的数据结构，实际上是一long类型�
 ## 游戏截图
 ![](https://github.com/tctctctctc/python-/raw/master/resouse/a.png)
 
-
-## 开发者
-  小王爷
-
-## 交流
-  QQ：935706071   
-  邮箱：935706071@qq.com
   
 ## License
   [Apache-2.0 License](LICENSE)
