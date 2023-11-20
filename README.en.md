@@ -1,14 +1,41 @@
-# python-gobang
+<h1 align="center">python-gobang</h1>
+<div align="center">
+  <a href="https://github.com/tctctctctc/python-gobang/stargazers">
+    <img src="https://img.shields.io/github/stars/tctctctctc/python-gobang" alt="Stars Badge"/>
+  </a>
+  <a href="https://github.com/tctctctctc/python-gobang/network/members">
+    <img src="https://img.shields.io/github/forks/tctctctctc/python-gobang" alt="Forks Badge"/>
+  </a>
+  <a href="https://github.com/tctctctctc/python-gobang/pulls">
+    <img src="https://img.shields.io/github/issues-pr/tctctctctc/python-gobang" alt="Pull Requests Badge"/>
+  </a>
+  <a href="https://github.com/tctctctctc/python-gobang/issues">
+    <img src="https://img.shields.io/github/issues/tctctctctc/python-gobang" alt="Issues Badge"/>
+  </a>
+  <a href="https://github.com/tctctctctc/python-gobang/graphs/contributors">
+    <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/tctctctctc/python-gobang?color=2b9348">
+  </a>
+  <a href="https://github.com/tctctctctc/python-gobang/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/tctctctctc/python-gobang?color=2b9348" alt="License Badge"/>
+  </a>  
+  <br>
+  <a href="https://github.com/tctctctctc/python-gobang/blob/master/README.md">
+    <img src="https://img.shields.io/static/v1?label=&labelColor=505050&message=Chinese 中文自述文件&color=%230076D6&style=flat&logo=google-chrome&logoColor=green" alt="website"/>
+  </a>
+  
+  <i>Loved the project? Please consider giving a Star ⭐️ to help it improve!</i>
+</div>
 
-## Background  
+---
+
+### 1. Background  
   This project is a Gobang game just after learning Python socket.  
   This project is implemented with pyGame and socket, which is divided into server and client part,and can be played by two people in LAN.  
   In the windows environment, it runs normally after many tests.   
-  [Zh Version](README.md)
       
-## Main ideas
+### 2. Main ideas
 
-- LAN
+#### 2.1 LAN
 
 For the local area network function, first establish a connection (TCP), and then send the coordinates of the pieces to the opponent each time they play chess.  
 When the coordinate is received, it is instantiated into a chess sub object.  
@@ -18,8 +45,7 @@ The select function provides the fd_set data structure, which is actually an arr
 The job of establishing a connection is done by the programmer,When select() is called, the kernel modifies the value of fd_set according to the IO state,Thus, the process that executed the select() is informed which socket or file is readable or writable.  
 It is mainly used in socket communication.
 
-
-- Player vs Computer
+#### 2.2 Player vs Computer
 
 The idea of computer combat is also very simple. It should be the most common and simplest method.  
 It is to cycle through each point of the chessboard, judge the value of the point, and select the point with the greatest value.This requires a certain understanding of Gobang's form. Here are some common types of chess(Agreement 1 is your chess piece,2 is the opponent's pieces,0 is empty)
@@ -30,10 +56,5 @@ It is to cycle through each point of the chessboard, judge the value of the poin
 In this way, judge each type of chess and get the value of the point.  
 When the computer chooses the position of the drop, it needs to traverse the chessboard twice to get the maximum value of attack and defense.
 
-
-## Game screenshot
+### 3. Game screenshot
 ![](https://github.com/tctctctctc/python-/raw/master/resouse/a.png)
-  
-## License
-  [Apache-2.0 License](LICENSE)
-
